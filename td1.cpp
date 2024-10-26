@@ -6,11 +6,13 @@
 class Cor {
 public:
     int r, g, b;
+    Cor(int r, int g, int b) : r(r), g(g), b(b) {};
 };
 
 class Ponto3D {
 public:
     double x, y, z;
+    Ponto3D(double x, double y, double z) : x(x), y(y), z(z) {};
 };
 
 bool intersecaoEsfera(const Ponto3D& origem, const Ponto3D& direcao, const Ponto3D& centroEsfera, double rEsfera, double& t) {
@@ -53,7 +55,7 @@ int main() {
     glfwMakeContextCurrent(window);
     glOrtho(0, nCol, 0, nLin, -1, 1);
 
-    double wJanela = 4.0, hJanela = 4.0, dJanela = 20, zEsfera = 20.0;
+    double wJanela = 4.0, hJanela = 4.0, dJanela = 20, zEsfera = 30.0;
     double rEsfera = 1.0;
     Ponto3D centroEsfera(0, 0, -zEsfera);
 
