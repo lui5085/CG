@@ -2,9 +2,9 @@
 #include <iostream>
 #include <vector>
 #include <cmath>
-#include "funcoes.h"
+#include "lib/funcoes.h"
 
-
+//Função que pinta um pixel na tela utilizando o opengl
 void paintPixel(int nCol, int nLin, std::vector<std::vector<Cor>>& canvas, Cor cor) {
     canvas[nCol][nLin] = cor;
     glColor3ub(cor.r, cor.g, cor.b); // Define a cor do pixel
@@ -14,13 +14,15 @@ void paintPixel(int nCol, int nLin, std::vector<std::vector<Cor>>& canvas, Cor c
 
 
 int main() {
-
+    //teste caso o opengl não inicialize
     if (!glfwInit()) {
         std::cerr << "Falha ao iniciar o GLFW" << std::endl;
         return -1;
     }
 
     int nCol = 800, nLin = 800;
+
+    //cria a janela e testa se foi criada com sucesso
     GLFWwindow* window = glfwCreateWindow(nCol, nLin, "Esfera", nullptr, nullptr);
     if (!window) {
         std::cerr << "Falha ao criar a janela" << std::endl;
@@ -35,11 +37,10 @@ int main() {
     double rEsfera = 1.0;
     Ponto3D centroEsfera(0, 0, -zEsfera);
 
-
     Cor esfColor(255, 0, 0);
     Cor bgColor(100, 100, 100);
 
-    std::vector<std::vector<Cor>> canvas(nLin, std::vector<Cor>(nCol, bgColor));
+    std::vector<std::vector<Cor>> canvas(nLin, std::vector<Cor>(nCol, bgColor));//vetor que armazena a cor de cada pixel
 
     double Dx = wJanela / nCol;
     double Dy = hJanela / nLin;
