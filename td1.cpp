@@ -2,32 +2,8 @@
 #include <iostream>
 #include <vector>
 #include <cmath>
+#include "funcoes.h"
 
-class Cor {
-public:
-    int r, g, b;
-    Cor(int r, int g, int b) : r(r), g(g), b(b) {};
-};
-
-class Ponto3D {
-public:
-    double x, y, z;
-    Ponto3D(double x, double y, double z) : x(x), y(y), z(z) {};
-};
-
-bool intersecaoEsfera(const Ponto3D& origem, const Ponto3D& direcao, const Ponto3D& centroEsfera, double rEsfera, double& t) {
-    Ponto3D oc = {origem.x - centroEsfera.x, origem.y - centroEsfera.y, origem.z - centroEsfera.z};
-    double a = direcao.x * direcao.x + direcao.y * direcao.y + direcao.z * direcao.z;
-    double b = 2.0 * (oc.x * direcao.x + oc.y * direcao.y + oc.z * direcao.z);
-    double c = oc.x * oc.x + oc.y * oc.y + oc.z * oc.z - rEsfera * rEsfera;
-
-    double delta = b * b - 4 * a * c;
-
-    if (delta < 0) return false;
-
-    t = (-b - std::sqrt(delta)) / (2.0 * a);
-    return true;
-}
 
 void paintPixel(int nCol, int nLin, std::vector<std::vector<Cor>>& canvas, Cor cor) {
     canvas[nCol][nLin] = cor;
@@ -55,7 +31,7 @@ int main() {
     glfwMakeContextCurrent(window);
     glOrtho(0, nCol, 0, nLin, -1, 1);
 
-    double wJanela = 4.0, hJanela = 4.0, dJanela = 20, zEsfera = 30.0;
+    double wJanela = 4.0, hJanela = 4.0, dJanela = 20, zEsfera = 50.0;
     double rEsfera = 1.0;
     Ponto3D centroEsfera(0, 0, -zEsfera);
 
@@ -80,15 +56,14 @@ int main() {
 
                 Ponto3D direcao(x, y, -dJanela);
 
-                double magnitude = std::sqrt(direcao.x * direcao.x + direcao.y * direcao.y + direcao.z * direcao.z);
+                double magnitude = sqrt(direcao.x * direcao.x + direcao.y * direcao.y + direcao.z * direcao.z);
                 direcao.x /= magnitude;
                 direcao.y /= magnitude;
                 direcao.z /= magnitude;
 
                 double t;
-                if (intersecaoEsfera(origem, direcao, centroEsfera, rEsfera, t)) {
+                if (funcoes::intersecaoEsfera(origem, direcao, centroEsfera, rEsfera, t)) {
                     paintPixel(l, c, canvas, esfColor);
-
 
                 }
                 else {
