@@ -2,6 +2,12 @@
 
 This project is a simple C++ application that uses OpenGL and GLFW to render a 3D sphere on the screen. The project includes functions to initialize the OpenGL context, create a window, and render the sphere.
 
+## Students
+
+Luis Antônio Andrade de Albuquerque - 557472
+
+José Alberto Rodrigues Neto - 547872
+
 ## Prerequisites
 
 Before you begin, ensure you have the following installed on your system:
