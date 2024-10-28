@@ -63,7 +63,7 @@ int main() {
                 direcao.z /= magnitude;
 
                 double t;
-                if (funcoes::intersecaoEsfera(origem, direcao, centroEsfera, rEsfera, t)) {
+                if (funcoes::intersecaoEsfera(origem, direcao, centroEsfera, rEsfera)) {
                     paintPixel(l, c, canvas, esfColor);
 
                 }

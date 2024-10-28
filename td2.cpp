@@ -1,0 +1,127 @@
+#include <GLFW/glfw3.h>
+#include <iostream>
+#include <vector>
+#include <cmath>
+#include "lib/funcoes.h"
+
+
+
+
+int main() {
+    //teste caso o opengl não inicialize
+    if (!glfwInit()) {
+        std::cerr << "Falha ao iniciar o GLFW" << std::endl;
+        return -1;
+    }
+
+    int nCol = 800, nLin = 800;
+
+    //cria a janela e testa se foi criada com sucesso
+    GLFWwindow* window = glfwCreateWindow(nCol, nLin, "Esfera", nullptr, nullptr);
+    if (!window) {
+        std::cerr << "Falha ao criar a janela" << std::endl;
+        glfwTerminate();
+        return -1;
+    }
+
+    glfwMakeContextCurrent(window);
+    glOrtho(0, nCol, 0, nLin, -1, 1);
+
+    double wJanela = 4.0, hJanela = 4.0, dJanela = 20, zEsfera = 10.0;
+    double rEsfera = 1.0;
+    Ponto3D centroEsfera(0, 0, -zEsfera);
+
+
+    Cor bgColor(100, 100, 100);
+    
+    Ponto3D mat = Ponto3D(1.0, 0.0, 0.0);
+
+    Ponto3D I_F = Ponto3D(0.7, 0.7, 0.7);
+    Ponto3D P_F = Ponto3D(0.0, 0.5, 0.0);
+
+
+    double alpha = 50.0;
+
+    Ponto3D oc = funcoes::Ponto3D_escalar(centroEsfera, -1);
+
+    double Dx = wJanela / nCol;
+    double Dy = hJanela / nLin;
+    Ponto3D origem(0, 0, 0);
+
+    while (!glfwWindowShouldClose(window)) {
+        glBegin(GL_POINTS);
+        glClear(GL_COLOR_BUFFER_BIT);
+
+        for (int l = 0; l < nLin; l++) {
+            double y = hJanela / 2.0 - Dy / 2.0 - l * Dy;
+            for (int c = 0; c < nCol; c++) {
+                double x = -wJanela / 2.0 + Dx / 2.0 + c * Dx;
+
+                Ponto3D direcao(x, y, -dJanela);
+
+                direcao = funcoes::Ponto3D_Normalizado(direcao);
+
+
+                double a1 = funcoes::Ponto3D_produtoEscalar(direcao, direcao);
+                double b1 = 2.0 * funcoes::Ponto3D_produtoEscalar(direcao, oc);
+                double c1 = funcoes::Ponto3D_produtoEscalar(oc, oc) - rEsfera * rEsfera;
+                double delta = b1 * b1 - 4 * a1 * c1;
+
+
+
+
+                double t = (-b1 - std::sqrt(delta)) / (2.0 * a1);
+
+                if (delta < 0) {
+                    t = (-b1 + std::sqrt(delta)) / (2 * a1);;
+                }
+
+
+
+
+
+
+                if (funcoes::intersecaoEsfera(origem, direcao, centroEsfera, rEsfera)) {
+                    Ponto3D PI = funcoes::Ponto3D_escalar(direcao, t);
+                    Ponto3D normal = funcoes::Ponto3D_subtrai(PI, P_F);
+                    normal = funcoes::Ponto3D_Normalizado(normal);
+
+                    Ponto3D v_inverso = funcoes::Ponto3D_escalar(direcao, -1);
+
+                    Ponto3D L = funcoes::Ponto3D_subtrai(P_F, PI);
+                    L = funcoes::Ponto3D_Normalizado(L);
+
+                    Ponto3D r = funcoes::Ponto3D_subtrai(funcoes::Ponto3D_escalar(normal, 2 * funcoes::Ponto3D_produtoEscalar(normal, L)), L);
+
+
+
+
+                    Ponto3D I_d = funcoes::Ponto3D_escalar(funcoes::Ponto3D_multiplica(mat, I_F),funcoes::max(funcoes::Ponto3D_produtoEscalar(normal, l), 0));
+
+                    Ponto3D I_e = funcoes::Ponto3D_escalar(funcoes::Ponto3D_multiplica(mat, I_F),funcoes::max(pow(funcoes::Ponto3D_produtoEscalar(v_inverso, r),alpha), 0));
+
+                    Ponto3D I = funcoes::Ponto3D_soma(I_d, I_e);
+
+                    Cor cor = Cor(funcoes::min(I.x * 255.0 , 255.0),funcoes::min( I.y * 255.0,255.0),funcoes::min( I.z * 255.0,255.0));
+
+                    glColor3ub(cor.r, cor.g, cor.b); // Define a cor do pixel
+                    glVertex2i(l, c);
+
+                }
+                else {
+                    glColor3ub(bgColor.r, bgColor.g, bgColor.b); // Define a cor do pixel
+                    glVertex2i(l, c);
+                }
+            }
+        }
+
+        glEnd();
+        glfwSwapBuffers(window);
+        glfwPollEvents();
+    }
+
+    glfwDestroyWindow(window);
+    glfwTerminate();
+
+    return 0;
+}
