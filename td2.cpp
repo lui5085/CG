@@ -36,7 +36,9 @@ int main() {
 
     Cor bgColor(100, 100, 100);
     
-    Ponto3D k = Ponto3D(1.0, 0.0, 0.0);
+    Ponto3D k_d = Ponto3D(1.0, 0.0, 0.0);
+    Ponto3D k_e = Ponto3D(1.0, 1.0, 1.0);
+
 
     Ponto3D I_F = Ponto3D(0.7, 0.7, 0.7);
     Ponto3D P_F = Ponto3D(0.0, 0.5, 0.0);
@@ -84,13 +86,13 @@ int main() {
 
 
 
-                    Ponto3D I_d = funcoes::Ponto3D_escalar(funcoes::Ponto3D_multiplica(k, I_F),funcoes::max(funcoes::Ponto3D_produtoEscalar(normal, vetor_luminoso), 0));
+                    Ponto3D I_d = funcoes::Ponto3D_escalar(funcoes::Ponto3D_multiplica(k_d, I_F),funcoes::max(funcoes::Ponto3D_produtoEscalar(normal, vetor_luminoso), 0));
 
-                    Ponto3D I_e = funcoes::Ponto3D_escalar(funcoes::Ponto3D_multiplica(k, I_F),funcoes::max(pow(funcoes::Ponto3D_produtoEscalar(v_inverso, r),alpha), 0));
+                    Ponto3D I_e = funcoes::Ponto3D_escalar(funcoes::Ponto3D_multiplica(k_e, I_F),funcoes::max(pow(funcoes::Ponto3D_produtoEscalar(v_inverso, r),alpha), 0));
 
                     Ponto3D I = funcoes::Ponto3D_soma(I_d, I_e);
 
-                    Cor cor = Cor(funcoes::min(255, funcoes::max(0, (int)(I.x * 255))),funcoes::min(255, funcoes::max(0, (int)(I.y * 255))),funcoes::min(255, funcoes::max(0, (int)(I.z * 255))));
+                    Cor cor = Cor(funcoes::min(255, funcoes::max(0, (I.x * 255))),funcoes::min(255, funcoes::max(0, (I.y * 255))),funcoes::min(255, funcoes::max(0, (I.z * 255))));
 
                     glColor3ub(cor.r, cor.g, cor.b); // Define a cor do pixel
                     glVertex2i(l, c);

@@ -42,29 +42,28 @@ double funcoes::Ponto3D_produtoEscalar(Ponto3D p1, Ponto3D p2)
 }
 
 
-Ponto3D funcoes::Ponto3D_normaliza(Ponto3D p)
+double funcoes::Ponto3D_norma(Ponto3D p)
 {
-    double norma = std::sqrt(p.x * p.x + p.y * p.y + p.z * p.z);
-    return {p.x / norma, p.y / norma, p.z / norma};
+    return std::sqrt(Ponto3D_produtoEscalar(p, p));
 }
 
 Ponto3D funcoes::Ponto3D_Normalizado(Ponto3D v) {
-        Ponto3D result = v;
-        float length = sqrtf(v.x * v.x + v.y * v.y + v.z * v.z);
-        if (length == 0.0f) length = 1.0f;
-        float ilength = 1.0f / length;
+    double norma = Ponto3D_norma(v);
+    Ponto3D resultado;
+    resultado.x = v.x / norma;
+    resultado.y = v.y / norma;
+    resultado.z = v.z / norma;
 
-        result.x *= ilength;
-        result.y *= ilength;
-        result.z *= ilength;
-
-        return result;
-    }
+    return resultado;
+}
 
 
-Ponto3D funcoes::Ponto3D_multiplica(Ponto3D p1, Ponto3D p2)
-{
-    return {p1.y * p2.z - p1.z * p2.y, p1.z * p2.x - p1.x * p2.z, p1.x * p2.y - p1.y * p2.x};
+Ponto3D funcoes::Ponto3D_multiplica(Ponto3D p1, Ponto3D p2){
+    Ponto3D resultado;
+    resultado.x = p1.x * p2.x;
+    resultado.y = p1.y * p2.y;
+    resultado.z = p1.z * p2.z;
+    return resultado;
 }
 
 Ponto3D funcoes::Ponto3D_reflete(Ponto3D p, Ponto3D normal)
@@ -93,10 +92,10 @@ Ponto3D funcoes::Ponto3D_rotaciona(Ponto3D p, Ponto3D normal, double angulo)
 }
 
 bool funcoes::intersecaoEsfera(const Ponto3D& origem, const Ponto3D& direcao, const Ponto3D& centroEsfera, double rEsfera, double& t) {
-    Ponto3D oc = funcoes::Ponto3D_subtrai(origem, centroEsfera);
-    double a = funcoes::Ponto3D_produtoEscalar(direcao, direcao);
-    double b = 2.0 * funcoes::Ponto3D_produtoEscalar(oc, direcao);
-    double c = funcoes::Ponto3D_produtoEscalar(oc, oc) - rEsfera * rEsfera;
+    Ponto3D oc = Ponto3D_subtrai(origem, centroEsfera);
+    double a = Ponto3D_produtoEscalar(direcao, direcao);
+    double b = 2.0 * Ponto3D_produtoEscalar(oc, direcao);
+    double c = Ponto3D_produtoEscalar(oc, oc) - rEsfera * rEsfera;
 
     double delta = b * b - 4 * a * c;
 
@@ -106,15 +105,14 @@ bool funcoes::intersecaoEsfera(const Ponto3D& origem, const Ponto3D& direcao, co
     double t1 = (-b - sqrtDelta) / (2.0 * a);
     double t2 = (-b + sqrtDelta) / (2.0 * a);
 
-    if (t1 > 0.0) {
-        t = t1;
-        return true;
+    t = min(t1, t2);
+
+    if (t == t1 && t2 < 0)
+    {
+        return false;
     }
-    if (t2 > 0.0) {
-        t = t2;
-        return true;
-    }
-    return false;
+    return true;
+
 }
 
 

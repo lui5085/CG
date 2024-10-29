@@ -27,7 +27,7 @@ public:
     static Ponto3D Ponto3D_soma(Ponto3D p1, Ponto3D p2);
     static Ponto3D Ponto3D_subtrai(Ponto3D p1, Ponto3D p2);
     static double Ponto3D_produtoEscalar(Ponto3D p1, Ponto3D p2);
-    static Ponto3D Ponto3D_normaliza(Ponto3D p);
+    static double Ponto3D_norma(Ponto3D p);
     static Ponto3D Ponto3D_multiplica(Ponto3D p1, Ponto3D p2);
     static Ponto3D Ponto3D_reflete(Ponto3D p, Ponto3D normal);
     static Ponto3D Ponto3D_refrata(Ponto3D p, Ponto3D normal, double n1, double n2);
