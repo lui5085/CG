@@ -23,7 +23,7 @@ int main() {
     int nCol = 800, nLin = 800;
 
     //cria a janela e testa se foi criada com sucesso
-    GLFWwindow* window = glfwCreateWindow(nCol, nLin, "Esfera", nullptr, nullptr);
+    GLFWwindow* window = glfwCreateWindow(800, 800, "Esfera", nullptr, nullptr);
     if (!window) {
         std::cerr << "Falha ao criar a janela" << std::endl;
         glfwTerminate();
@@ -33,8 +33,8 @@ int main() {
     glfwMakeContextCurrent(window);
     glOrtho(0, nCol, 0, nLin, -1, 1);
 
-    double wJanela = 4.0, hJanela = 4.0, dJanela = 20, zEsfera = 50.0;
-    double rEsfera = 1.0;
+    double wJanela = 4.0, hJanela = 4.0, dJanela = 20, zEsfera = 30.0;
+    double rEsfera = 2.0;
     Ponto3D centroEsfera(0, 0, -zEsfera);
 
     Cor esfColor(255, 0, 0);
@@ -57,10 +57,8 @@ int main() {
 
                 Ponto3D direcao(x, y, -dJanela);
 
-                double magnitude = sqrt(direcao.x * direcao.x + direcao.y * direcao.y + direcao.z * direcao.z);
-                direcao.x /= magnitude;
-                direcao.y /= magnitude;
-                direcao.z /= magnitude;
+                direcao = funcoes::Ponto3D_Normalizado(direcao);
+
 
                 double t;
                 if (funcoes::intersecaoEsfera(origem, direcao, centroEsfera, rEsfera, t)) {

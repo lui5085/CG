@@ -42,16 +42,28 @@ double funcoes::Ponto3D_produtoEscalar(Ponto3D p1, Ponto3D p2)
 }
 
 
-Ponto3D funcoes::Ponto3D_normaliza(Ponto3D p)
+double funcoes::Ponto3D_norma(Ponto3D p)
 {
-    double norma = std::sqrt(p.x * p.x + p.y * p.y + p.z * p.z);
-    return {p.x / norma, p.y / norma, p.z / norma};
+    return std::sqrt(Ponto3D_produtoEscalar(p, p));
+}
+
+Ponto3D funcoes::Ponto3D_Normalizado(Ponto3D v) {
+    double norma = Ponto3D_norma(v);
+    Ponto3D resultado;
+    resultado.x = v.x / norma;
+    resultado.y = v.y / norma;
+    resultado.z = v.z / norma;
+
+    return resultado;
 }
 
 
-Ponto3D funcoes::Ponto3D_multiplica(Ponto3D p1, Ponto3D p2)
-{
-    return {p1.y * p2.z - p1.z * p2.y, p1.z * p2.x - p1.x * p2.z, p1.x * p2.y - p1.y * p2.x};
+Ponto3D funcoes::Ponto3D_multiplica(Ponto3D p1, Ponto3D p2){
+    Ponto3D resultado;
+    resultado.x = p1.x * p2.x;
+    resultado.y = p1.y * p2.y;
+    resultado.z = p1.z * p2.z;
+    return resultado;
 }
 
 Ponto3D funcoes::Ponto3D_reflete(Ponto3D p, Ponto3D normal)
@@ -89,10 +101,34 @@ bool funcoes::intersecaoEsfera(const Ponto3D& origem, const Ponto3D& direcao, co
 
     if (delta < 0) return false;
 
-    t = (-b - std::sqrt(delta)) / (2.0 * a);
+    double sqrtDelta = std::sqrt(delta);
+    double t1 = (-b - sqrtDelta) / (2.0 * a);
+    double t2 = (-b + sqrtDelta) / (2.0 * a);
+
+    t = min(t1, t2);
+
+    if (t == t1 && t2 < 0)
+    {
+        return false;
+    }
     return true;
+
 }
 
+
+double funcoes::max(double a, double b){
+    if (a>b){
+        return a;
+    }
+    return b;
+}
+double funcoes::min(double a, double b){
+
+    if(a < b){
+        return a;
+    }
+    return b;
+}
 
 
 
