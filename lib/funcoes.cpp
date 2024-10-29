@@ -119,13 +119,11 @@ bool funcoes::intersecaoEsfera(const Ponto3D& origem, const Ponto3D& direcao, co
 
 
 double funcoes::max(double a, double b){
-
-    if(a > b){
+    if (a>b){
         return a;
     }
     return b;
 }
-
 double funcoes::min(double a, double b){
 
     if(a < b){

@@ -27,7 +27,7 @@ int main() {
     glfwMakeContextCurrent(window);
     glOrtho(0, nCol, 0, nLin, -1, 1);
 
-    double wJanela = 4.0, hJanela = 4.0, dJanela = 20, zEsfera = 10.0;
+    double wJanela = 4.0, hJanela = 4.0, dJanela = 20   , zEsfera = 20.0;
     double rEsfera = 1.0;
     Ponto3D centroEsfera(0, 0, -zEsfera);
     
@@ -71,26 +71,26 @@ int main() {
 
                 if (funcoes::intersecaoEsfera(origem, direcao, centroEsfera, rEsfera, t)) {
                     Ponto3D PI = funcoes::Ponto3D_escalar(direcao, t);
-                    Ponto3D normal = funcoes::Ponto3D_subtrai(PI, P_F);
+                    Ponto3D normal = funcoes::Ponto3D_subtrai(PI, centroEsfera);
                     normal = funcoes::Ponto3D_Normalizado(normal);
 
                     Ponto3D v_inverso = funcoes::Ponto3D_escalar(direcao, -1);
 
-                    Ponto3D L = funcoes::Ponto3D_subtrai(P_F, PI);
-                    L = funcoes::Ponto3D_Normalizado(L);
+                    Ponto3D vetor_luminoso = funcoes::Ponto3D_subtrai(P_F, PI);
+                    vetor_luminoso = funcoes::Ponto3D_Normalizado(vetor_luminoso);
 
-                    Ponto3D r = funcoes::Ponto3D_subtrai(funcoes::Ponto3D_escalar(normal, 2 * funcoes::Ponto3D_produtoEscalar(normal, L)), L);
-
-
+                    Ponto3D r = funcoes::Ponto3D_subtrai(funcoes::Ponto3D_escalar(normal, 2 * funcoes::Ponto3D_produtoEscalar(normal, vetor_luminoso)), vetor_luminoso);
 
 
-                    Ponto3D I_d = funcoes::Ponto3D_escalar(funcoes::Ponto3D_multiplica(k, I_F),funcoes::max(funcoes::Ponto3D_produtoEscalar(normal, l), 0));
+
+
+                    Ponto3D I_d = funcoes::Ponto3D_escalar(funcoes::Ponto3D_multiplica(k, I_F),funcoes::max(funcoes::Ponto3D_produtoEscalar(normal, vetor_luminoso), 0));
 
                     Ponto3D I_e = funcoes::Ponto3D_escalar(funcoes::Ponto3D_multiplica(k, I_F),funcoes::max(pow(funcoes::Ponto3D_produtoEscalar(v_inverso, r),alpha), 0));
 
                     Ponto3D I = funcoes::Ponto3D_soma(I_d, I_e);
 
-                    Cor cor = Cor(funcoes::min(I.x * 255.0 , 255.0),funcoes::min( I.y * 255.0,255.0),funcoes::min( I.z * 255.0,255.0));
+                    Cor cor = Cor(funcoes::min(255, funcoes::max(0, (int)(I.x * 255))),funcoes::min(255, funcoes::max(0, (int)(I.y * 255))),funcoes::min(255, funcoes::max(0, (int)(I.z * 255))));
 
                     glColor3ub(cor.r, cor.g, cor.b); // Define a cor do pixel
                     glVertex2i(l, c);
