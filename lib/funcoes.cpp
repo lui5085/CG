@@ -92,18 +92,31 @@ Ponto3D funcoes::Ponto3D_rotaciona(Ponto3D p, Ponto3D normal, double angulo)
     return {x, y, z};
 }
 
-bool funcoes::intersecaoEsfera(const Ponto3D& origem, const Ponto3D& direcao, const Ponto3D& centroEsfera, double rEsfera) {
-    Ponto3D oc = Ponto3D_subtrai(origem, centroEsfera);
-    double a = Ponto3D_produtoEscalar(direcao, direcao);
-    double b = 2.0 * Ponto3D_produtoEscalar(oc, direcao);
-    double c = Ponto3D_produtoEscalar(oc, oc) - rEsfera * rEsfera;
+bool funcoes::intersecaoEsfera(const Ponto3D& origem, const Ponto3D& direcao, const Ponto3D& centroEsfera, double rEsfera, double& t) {
+    Ponto3D oc = funcoes::Ponto3D_subtrai(origem, centroEsfera);
+    double a = funcoes::Ponto3D_produtoEscalar(direcao, direcao);
+    double b = 2.0 * funcoes::Ponto3D_produtoEscalar(oc, direcao);
+    double c = funcoes::Ponto3D_produtoEscalar(oc, oc) - rEsfera * rEsfera;
 
     double delta = b * b - 4 * a * c;
 
     if (delta < 0) return false;
 
-    return true;
+    double sqrtDelta = std::sqrt(delta);
+    double t1 = (-b - sqrtDelta) / (2.0 * a);
+    double t2 = (-b + sqrtDelta) / (2.0 * a);
+
+    if (t1 > 0.0) {
+        t = t1;
+        return true;
+    }
+    if (t2 > 0.0) {
+        t = t2;
+        return true;
+    }
+    return false;
 }
+
 
 double funcoes::max(double a, double b){
 

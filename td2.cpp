@@ -30,11 +30,13 @@ int main() {
     double wJanela = 4.0, hJanela = 4.0, dJanela = 20, zEsfera = 10.0;
     double rEsfera = 1.0;
     Ponto3D centroEsfera(0, 0, -zEsfera);
+    
+
 
 
     Cor bgColor(100, 100, 100);
     
-    Ponto3D mat = Ponto3D(1.0, 0.0, 0.0);
+    Ponto3D k = Ponto3D(1.0, 0.0, 0.0);
 
     Ponto3D I_F = Ponto3D(0.7, 0.7, 0.7);
     Ponto3D P_F = Ponto3D(0.0, 0.5, 0.0);
@@ -42,7 +44,6 @@ int main() {
 
     double alpha = 50.0;
 
-    Ponto3D oc = funcoes::Ponto3D_escalar(centroEsfera, -1);
 
     double Dx = wJanela / nCol;
     double Dy = hJanela / nLin;
@@ -62,26 +63,13 @@ int main() {
                 direcao = funcoes::Ponto3D_Normalizado(direcao);
 
 
-                double a1 = funcoes::Ponto3D_produtoEscalar(direcao, direcao);
-                double b1 = 2.0 * funcoes::Ponto3D_produtoEscalar(direcao, oc);
-                double c1 = funcoes::Ponto3D_produtoEscalar(oc, oc) - rEsfera * rEsfera;
-                double delta = b1 * b1 - 4 * a1 * c1;
+
+                double t;
 
 
 
 
-                double t = (-b1 - std::sqrt(delta)) / (2.0 * a1);
-
-                if (delta < 0) {
-                    t = (-b1 + std::sqrt(delta)) / (2 * a1);;
-                }
-
-
-
-
-
-
-                if (funcoes::intersecaoEsfera(origem, direcao, centroEsfera, rEsfera)) {
+                if (funcoes::intersecaoEsfera(origem, direcao, centroEsfera, rEsfera, t)) {
                     Ponto3D PI = funcoes::Ponto3D_escalar(direcao, t);
                     Ponto3D normal = funcoes::Ponto3D_subtrai(PI, P_F);
                     normal = funcoes::Ponto3D_Normalizado(normal);
@@ -96,9 +84,9 @@ int main() {
 
 
 
-                    Ponto3D I_d = funcoes::Ponto3D_escalar(funcoes::Ponto3D_multiplica(mat, I_F),funcoes::max(funcoes::Ponto3D_produtoEscalar(normal, l), 0));
+                    Ponto3D I_d = funcoes::Ponto3D_escalar(funcoes::Ponto3D_multiplica(k, I_F),funcoes::max(funcoes::Ponto3D_produtoEscalar(normal, l), 0));
 
-                    Ponto3D I_e = funcoes::Ponto3D_escalar(funcoes::Ponto3D_multiplica(mat, I_F),funcoes::max(pow(funcoes::Ponto3D_produtoEscalar(v_inverso, r),alpha), 0));
+                    Ponto3D I_e = funcoes::Ponto3D_escalar(funcoes::Ponto3D_multiplica(k, I_F),funcoes::max(pow(funcoes::Ponto3D_produtoEscalar(v_inverso, r),alpha), 0));
 
                     Ponto3D I = funcoes::Ponto3D_soma(I_d, I_e);
 

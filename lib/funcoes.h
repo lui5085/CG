@@ -32,7 +32,7 @@ public:
     static Ponto3D Ponto3D_reflete(Ponto3D p, Ponto3D normal);
     static Ponto3D Ponto3D_refrata(Ponto3D p, Ponto3D normal, double n1, double n2);
     static Ponto3D Ponto3D_rotaciona(Ponto3D p, Ponto3D normal, double angulo);
-    static bool intersecaoEsfera(const Ponto3D& origem, const Ponto3D& direcao, const Ponto3D& centroEsfera, double rEsfera);
+    static bool intersecaoEsfera(const Ponto3D& origem, const Ponto3D& direcao, const Ponto3D& centroEsfera, double rEsfera, double& t);
     static double max (double a, double b);
     static double min(double a, double b);
     static Ponto3D Ponto3D_Normalizado(Ponto3D v);
