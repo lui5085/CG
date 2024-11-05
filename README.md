@@ -6,7 +6,7 @@ This project is a simple C++ application that uses OpenGL and GLFW to render a 3
 
 Luis Antônio Andrade de Albuquerque - 557472
 
-José Alberto Rodrigues Neto - 547872
+Lia Linhares Carvakhedo - 554165
 
 ## Prerequisites
 
