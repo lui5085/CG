@@ -16,12 +16,12 @@ Plane::Plane(Ponto3D floor_, Ponto3D normal_, Ponto3D k_d_, Ponto3D k_e_, Ponto3
 }
 
 bool Plane::intersecao(const Ray& raio, double& t){
-    Ponto3D v = funcoes::Ponto3D_subtrai(floor, raio.origem);
+    Ponto3D dirV = funcoes::Ponto3D_subtrai(floor, raio.origem);
     double x = funcoes::Ponto3D_produtoEscalar(raio.direcao, normal);
     if (x == 0.0) {
         return false;
     }
-    t = funcoes::Ponto3D_produtoEscalar(v, normal);
+    t = funcoes::Ponto3D_produtoEscalar(dirV, normal);
     t = t / x;
     if (t < 0) {
         return false;

@@ -7,7 +7,7 @@
 #include "funcoes.h"
 #include "Ray.h"
 
-// No começo de Plane.h e Sphere.h
+
 class Ray;
 
 
