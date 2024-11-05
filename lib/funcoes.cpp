@@ -112,8 +112,9 @@ bool funcoes::intersecaoEsfera(const Ponto3D& origem, const Ponto3D& direcao, co
         return false;
     }
     return true;
-
 }
+
+
 
 
 double funcoes::max(double a, double b){

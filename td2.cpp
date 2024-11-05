@@ -7,6 +7,8 @@
 
 
 
+
+
 int main() {
     //teste caso o opengl não inicialize
     if (!glfwInit()) {
@@ -29,7 +31,7 @@ int main() {
 
     double wJanela = 4.0, hJanela = 4.0, dJanela = 20   , zEsfera = 20.0;
     double rEsfera = 1.0;
-    Ponto3D centroEsfera(-0.5, 0, -zEsfera);
+    Ponto3D centroEsfera(0, 0, -zEsfera);
     
 
 
@@ -41,7 +43,7 @@ int main() {
 
 
     Ponto3D I_F = Ponto3D(0.7, 0.7, 0.7);
-    Ponto3D P_F = Ponto3D(0.0, 0.5, 0.0);
+    Ponto3D P_F = Ponto3D(0.0, 0.0, 0.0);
 
 
     double alpha = 30.0;
@@ -63,7 +65,6 @@ int main() {
                 Ponto3D direcao(x, y, -dJanela);
 
                 direcao = funcoes::Ponto3D_Normalizado(direcao);
-
 
 
                 double t;
@@ -92,9 +93,9 @@ int main() {
 
                     Ponto3D I = funcoes::Ponto3D_soma(I_d, I_e);
 
-                    Cor cor = Cor(funcoes::min(255, funcoes::max(0, (I.x * 255))),funcoes::min(255, funcoes::max(0, (I.y * 255))),funcoes::min(255, funcoes::max(0, (I.z * 255))));
+                    Cor cor = Cor(funcoes::min(255, funcoes::max(0, I.x * 255)),funcoes::min(255, funcoes::max(0, (I.y * 255))),funcoes::min(255, funcoes::max(0, (I.z * 255))));
 
-                    glColor3ub(cor.r, cor.g, cor.b); // Define a cor do pixel
+                    glColor4ub(cor.r, cor.g, cor.b,255); // Define a cor do pixel
                     glVertex2i(l, c);
 
                 }
