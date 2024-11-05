@@ -42,6 +42,8 @@ Ponto3D intensidadeAmbiente(0.3, 0.3, 0.3);
 
 Ponto3D origemRaio(0.0, 0.0, 0.0);
 
+Cor corBg(100, 100, 100);
+
 int main() {
     if (!glfwInit()) {
         std::cerr << "Falha ao iniciar o GLFW" << std::endl;
@@ -70,7 +72,7 @@ int main() {
 
 
         for (int l = 0; l < nLin; l++) {
-            double y = hJanela / 2.0 - Dy / 2.0 - l * Dy;
+            double y = -hJanela / 2.0 + Dy / 2.0 + l * Dy;
             for (int c = 0; c < nCol; c++) {
                 double x = -wJanela / 2.0 + Dx / 2.0 + c * Dx;
 
@@ -78,60 +80,65 @@ int main() {
                 Ray raio = Ray(origemRaio, dr);
 
                 double t_esfera  = std::numeric_limits<double>::max();
-                double t_plano_chao = std::numeric_limits<double>::max();
-                double t_plano_fundo = std::numeric_limits<double>::max();
+                double t_chao = std::numeric_limits<double>::max();
+                double t_fundo = std::numeric_limits<double>::max();
 
-                bool intersecaoEsfera = esfera.intersecao(raio, t_esfera);
-                bool intersecaoChao = chao.intersecao(raio, t_plano_chao);
-                bool intersecaoFundo = fundo.intersecao(raio, t_plano_fundo);
-
-
+                bool interceptaEsfera = esfera.intersecao(raio, t_esfera);
+                bool interceptaChao = chao.intersecao(raio, t_chao);
+                bool InterceptaFundo = fundo.intersecao(raio, t_fundo);
 
 
 
+                Ponto3D I_T = intensidadeAmbiente;
 
-
-
-                Ponto3D I_total = intensidadeAmbiente;
-
-                if (intersecaoEsfera && (t_esfera < std::fabs(t_plano_chao) &&  t_esfera < std::fabs(t_plano_fundo))) {
-
-                    Ponto3D pt = funcoes::Ponto3D_soma(raio.origem, funcoes::Ponto3D_escalar(raio.direcao, t_esfera));
-                    I_total = esfera.iluminacao(pt, raio.direcao, posicaoLuz, intensidadeLuz, intensidadeAmbiente);
-                } else if (intersecaoChao && t_plano_chao < t_esfera && t_plano_chao < t_plano_fundo) {
-
-                    Ponto3D pt = funcoes::Ponto3D_soma(raio.origem, funcoes::Ponto3D_escalar(raio.direcao, t_plano_chao));
+                if (interceptaEsfera && (t_esfera < std::fabs(t_chao) &&  t_esfera < std::fabs(t_fundo))) {
+                    Ponto3D pt = funcoes::Ponto3D_escalar(raio.direcao, t_esfera);
+                    pt = funcoes::Ponto3D_soma(raio.origem, pt);
+                    I_T = esfera.iluminacao(pt, raio.direcao, posicaoLuz, intensidadeLuz, intensidadeAmbiente);
+                } else if (interceptaChao && t_chao < t_esfera && t_chao < t_fundo) {
+                    Ponto3D pt = funcoes::Ponto3D_escalar(raio.direcao, t_chao);
+                    pt = funcoes::Ponto3D_soma(raio.origem, pt);
                     Ponto3D luzdr = funcoes::Ponto3D_subtrai(posicaoLuz, pt);
                     Ray raioSombra(pt, luzdr);
                     if (!esfera.intersecao(raioSombra, t_esfera)) {
-                        I_total = chao.iluminacao(pt, raio.direcao, posicaoLuz, intensidadeLuz, intensidadeAmbiente);
+                        I_T = chao.iluminacao(pt, raio.direcao, posicaoLuz, intensidadeLuz, intensidadeAmbiente);
                     }
                     else {
                         Ponto3D sombra = Ponto3D(0.0, 0.0, 0.0);
-                        I_total = chao.iluminacao(pt, raio.direcao, posicaoLuz, sombra, intensidadeAmbiente);
+                        I_T = chao.iluminacao(pt, raio.direcao, posicaoLuz, sombra, intensidadeAmbiente);
                     }
-                } else if (intersecaoFundo && t_plano_fundo < t_esfera) {
-
-                    Ponto3D pt = funcoes::Ponto3D_soma(raio.origem, funcoes::Ponto3D_escalar(raio.direcao, t_plano_fundo));
+                } else if (InterceptaFundo && t_fundo < t_esfera ) {
+                    Ponto3D pt = funcoes::Ponto3D_escalar(raio.direcao, t_fundo);
+                    pt = funcoes::Ponto3D_soma(raio.origem, pt);
                     Ponto3D luzdr = funcoes::Ponto3D_Normalizado(funcoes::Ponto3D_subtrai(posicaoLuz, pt));
                     Ray raioSombra(pt, luzdr);
                     if (!esfera.intersecao(raioSombra, t_esfera)) {
-                        I_total = fundo.iluminacao(pt, raio.direcao, posicaoLuz, intensidadeLuz, intensidadeAmbiente);
+                        I_T = fundo.iluminacao(pt, raio.direcao, posicaoLuz, intensidadeLuz, intensidadeAmbiente);
                     }
                     else {
                         Ponto3D sombra = Ponto3D(0.0, 0.0, 0.0);
-                        I_total = fundo.iluminacao(pt, raio.direcao, posicaoLuz, sombra, intensidadeAmbiente);
+                        I_T = fundo.iluminacao(pt, raio.direcao, posicaoLuz, sombra, intensidadeAmbiente);
                     }
                 }
 
-                Cor cor = Cor(funcoes::min(255, funcoes::max(0, I_total.x * 255)),
-                              funcoes::min(255, funcoes::max(0, I_total.y * 255)),
-                              funcoes::min(255, funcoes::max(0, I_total.z * 255)));
+                if (I_T.x == intensidadeAmbiente.x && I_T.y == intensidadeAmbiente.y && I_T.z == intensidadeAmbiente.z) {
+                    glColor3ub(corBg.r, corBg.g, corBg.b);
+                    glVertex2i(c, l);
+                }
+
+                else
+                {
+                    Cor cor = Cor(funcoes::min(255, funcoes::max(0, I_T.x * 255)),
+                                  funcoes::min(255, funcoes::max(0, I_T.y * 255)),
+                                  funcoes::min(255, funcoes::max(0, I_T.z * 255)));
 
 
 
-                glColor3ub(cor.r, cor.g, cor.b);
-                glVertex2i(c, l);
+                    glColor3ub(cor.r, cor.g, cor.b);
+                    glVertex2i(c, l);
+                }
+
+
 
             }
         }
