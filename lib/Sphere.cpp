@@ -39,10 +39,6 @@ bool Sphere::intersecao(const Ray& raio, double& t) {
     }
     return true;
 
-
-
-
-
 }
 
 Ponto3D Sphere::iluminacao(Ponto3D Pt, Ponto3D dr, Ponto3D P_F, Ponto3D I_F, Ponto3D I_A) const{
@@ -52,14 +48,13 @@ Ponto3D Sphere::iluminacao(Ponto3D Pt, Ponto3D dr, Ponto3D P_F, Ponto3D I_F, Pon
     Ponto3D v = funcoes::Ponto3D_escalar(funcoes::Ponto3D_Normalizado(dr), -1);
     Ponto3D l = funcoes::Ponto3D_Normalizado(funcoes::Ponto3D_subtrai(P_F, Pt));
     Ponto3D n = funcoes::Ponto3D_Normalizado(funcoes::Ponto3D_subtrai(Pt, center));
-    float dotproduct_nl = funcoes::Ponto3D_produtoEscalar(n, l);
-    Ponto3D r = funcoes::Ponto3D_Normalizado(funcoes::Ponto3D_subtrai(funcoes::Ponto3D_escalar(n, 2 * dotproduct_nl), l));
-    float dotproduct_vr = funcoes::Ponto3D_produtoEscalar(v, r);
-    dotproduct_nl = funcoes::max(dotproduct_nl, 0);
-    dotproduct_vr = funcoes::max(dotproduct_vr, 0);
+    Ponto3D r = funcoes::Ponto3D_Normalizado(funcoes::Ponto3D_subtrai(funcoes::Ponto3D_escalar(n, 2 * funcoes::Ponto3D_produtoEscalar(n, l)), l));
+
+    double dotproduct_nl = funcoes::max(funcoes::Ponto3D_produtoEscalar(n, l), 0);
+    double dotproduct_vr = funcoes::max(funcoes::Ponto3D_produtoEscalar(v, r), 0);
 
 
-    Ponto3D I_d = funcoes::Ponto3D_escalar(funcoes::Ponto3D_multiplica(k_d, I_F), funcoes::max(dotproduct_nl, 0));
+    Ponto3D I_d = funcoes::Ponto3D_escalar(funcoes::Ponto3D_multiplica(k_d, I_F), dotproduct_nl);
     Ponto3D I_e = funcoes::Ponto3D_escalar(funcoes::Ponto3D_multiplica(k_e, I_F), funcoes::max(pow(dotproduct_vr, alpha), 0));
     Ponto3D I_a = funcoes::Ponto3D_multiplica(k_a, I_A);
 

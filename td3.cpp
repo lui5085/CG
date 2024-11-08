@@ -88,7 +88,6 @@ int main() {
                 bool InterceptaFundo = fundo.intersecao(raio, t_fundo);
 
 
-
                 Ponto3D I_T = intensidadeAmbiente;
 
                 if (interceptaEsfera && (t_esfera < std::fabs(t_chao) &&  t_esfera < std::fabs(t_fundo))) {
